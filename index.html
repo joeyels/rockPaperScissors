@@ -4,9 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Document</title>
 </head>
 <body>
+    <h1>Rock Paper Scissors</h1>
+    <div id='images'>
+        <img src="images/rockicon.png">
+        <img src="images/paper1.png">
+        <img src="images/scissors.png">
+    </div>
+    <div id="buttons">
+        <button id="rock">rock</button> 
+        <button id="paper">paper</button>
+        <button id="scissors">scissors</button>
+    </div>
+    <div id='results'>
+        <div id='computerAnswer'> </div>
+        <div id='gameResult'> </div>
+        <div id='tally'></div>
+        <div id='finalScore'></div>
+    </div>
     <script>
         function computerPlay() {
             let ranNum = Math.floor(Math.random() * 3);
@@ -68,31 +86,55 @@
             return gameAnswer;
         }
 
-        function game () {
+        function game () {                       
             let tally = 0;
-            for (let i = 0; i < 5; i++) {
-                let playerSelection = prompt("Rock Paper Scissors?");
-                playerSelection = playerSelection.toLowerCase();
+            let numClicks = 0;
+            const buttons = document.querySelectorAll('button');
 
-                const computerSelection = computerPlay();
-                const roundAnswer = playRound(playerSelection, computerSelection);
-                
-                if (roundAnswer ===  "You won! rock beats scissors" || roundAnswer === "You won! scissors beats paper" || roundAnswer === "You won! paper beats rock") {
-                    tally += 1;
-                }
-            }
-            console.log("You won " + tally + " times");
+            buttons.forEach((button) => {
+
+                 button.addEventListener('click', () => {
+                     document.getElementById('finalScore').textContent = ' ';
+                     numClicks += 1;
+                     console.log(numClicks);
+
+                    const computerSelection = computerPlay();
+                    document.getElementById('computerAnswer').textContent = "The computer chose " + computerSelection;
+
+                    const roundAnswer = playRound(button.id, computerSelection);
+                    document.getElementById('gameResult').textContent = roundAnswer;
+
+                    if (roundAnswer ===  "You won! rock beats scissors" || roundAnswer === "You won! scissors beats paper" || roundAnswer === "You won! paper beats rock") {
+                        tally += 1;
+                    }
+                     console.log(tally);
+                    document.getElementById("tally").textContent = "You have won " + tally + " out of 5 rounds";
+
+                    if (numClicks === 5) {
+
+                        if (tally >= 3) {
+                            console.log("you won the game!");
+                            document.getElementById('finalScore').textContent = "You won the game!! " + tally +  '-' + (5 - tally);
+                        } 
+                        else {
+                            console.log("game over. the computer won");
+                            document.getElementById('finalScore').textContent = "You lost! " + tally + "-" + (5 - tally);
+                        }
+                        /*document.getElementById('gameResult').textContent = ' ';
+                        document.getElementById('computerAnswer').textContent = ' ';
+                        document.getElementById('tally').textContent = ' ';*/
+
+                        numClicks = 0;
+                        tally = 0;
+                    }
+
+                })
+
+            }) 
+      
         }
 
         game();
-
-       
-    
-        
-
-
-
-        
         
     </script>
 </body>
